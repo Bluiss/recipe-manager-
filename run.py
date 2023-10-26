@@ -8,12 +8,15 @@ data = worksheet.get_all_records(default_blank=True)
 
 
 
-def recipeSearch():
+def cuisineRecipeSearch():
     """
     Search for a recipe based on the cuisine
     """
     while True:
-        print("What Cuisine would you like to eat?\n")
+        cuisines = ["American", "Asian", "Chinese", "Greek", "Hawaiian", "Indian", "Italian", "Mediterranean", "Mexican", "Russian", "Tex-mex", "Thai"]
+        print("What Cuisine would you like to eat? \n")
+        for index, cuisine in enumerate(cuisines, start=1):
+            print(f"{index}. {cuisine}")
 
         search_value = input("Enter your Cuisine here:\n")
 
@@ -30,4 +33,4 @@ def recipeSearch():
                 print(row)
 
 
-recipeSearch()
+cuisineRecipeSearch()
