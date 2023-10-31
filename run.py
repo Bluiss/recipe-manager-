@@ -8,6 +8,19 @@ data = worksheet.get_all_records(default_blank=True)
 
 
 
+def startManager():
+    startAnswer = input("what would you like to do?\n (1)Create a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
+    if startAnswer.lower() == "1":
+        print("create")
+    elif startAnswer.lower() == "2":
+        print("search")
+    elif startAnswer.lower() == "3":
+        print("Meal Plan")
+    else:
+        print("Please select an answer")
+
+
+
 def cuisineRecipeSearch():
     """
     Search for a recipe based on the cuisine
@@ -33,4 +46,8 @@ def cuisineRecipeSearch():
                 print(row)
 
 
-cuisineRecipeSearch()
+def main():
+    print("Weclome to the Recepie Manager!")
+    startManager()
+
+main()
