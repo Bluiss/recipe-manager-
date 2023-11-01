@@ -24,7 +24,8 @@ def startManager():
             print("create")
             break
         elif startAnswer.lower() == "2":
-            cuisineRecipeSearch()
+            selected_column = input("Enter your choice (or type 'exit' to quit): ")
+            recipeSearch(data, selected_column)
             break
         elif startAnswer.lower() == "3":
             print("Meal Plan")
@@ -35,37 +36,31 @@ def startManager():
 
 
 
-def cuisineRecipeSearch():
-    """
-    Search for a recipe based on the cuisine
-    """
+
+def recipeSearch(data, column_name, search_value):
+    matching_rows = [row for row in data if row.get(column_name) == search_value]
+
+    if not matching_rows:
+        print(f"Sorry, there's nothing in our database under {column_name} based on {search_value}")
+    else:
+        print(f"Please see all recipes associated with {search_value}")
+        for row in matching_rows:
+            print(row)
+
     while True:
-        cuisines = ["American", "Asian", "Chinese", "Greek", "Hawaiian", "Indian", "Italian", "Mediterranean", "Mexican", "Russian", "Tex-mex", "Thai"]
-        print("What Cuisine would you like to eat? \n")
-        for index, cuisine in enumerate(cuisines, start=1):
-            print(f"{index}. {cuisine}")
+        recipe_columns = ["Name", "Total Time", "Cuisine", "Dietary Restrictions"]
+        for index, recipe_column in enumerate(recipe_columns, start=1):
+            print(f"{index}. {recipe_column}")
 
-        search_value = input("Enter your Cuisine here:\n")
 
-        if search_value.lower() == 'exit':
-            break
-
-        matching_rows = [row for row in data if row["Cuisine"] == search_value]
-        
-        if not matching_rows:
-            print("Try again, no cuisine matches that input")
-        else:
-            print("Here is all the", search_value, "food we have")
-            for row in matching_rows:
-                print(row)
 
 
 
 
 
 def main():
-    print_pause("Weclome to the Recepie Manager!")
-    print_pause("we have thousands of recepies you can look into ")
+    print_pause("Weclome to the Recpie Manager!")
+    print_pause("we have thousands of recpies you can look into ")
     startManager()
 
 main()
