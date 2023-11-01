@@ -1,4 +1,7 @@
 import gspread
+import time
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
 
 sa = gspread.service_account(filename='creds.json')
@@ -7,17 +10,28 @@ worksheet = sh.worksheet('Sheet1')
 data = worksheet.get_all_records(default_blank=True)
 
 
+def print_pause(message):
+    print(message)
+    time.sleep(2)
 
 def startManager():
-    startAnswer = input("what would you like to do?\n (1)Create a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
-    if startAnswer.lower() == "1":
-        print("create")
-    elif startAnswer.lower() == "2":
-        print("search")
-    elif startAnswer.lower() == "3":
-        print("Meal Plan")
-    else:
-        print("Please select an answer")
+    """
+    Allows user to either search/create a recipe or creat a weekly meal plan 
+    """
+    while True:
+        startAnswer = input("what would you like to do?\n (1)Create a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
+        if startAnswer.lower() == "1":
+            print("create")
+            break
+        elif startAnswer.lower() == "2":
+            cuisineRecipeSearch()
+            break
+        elif startAnswer.lower() == "3":
+            print("Meal Plan")
+            break
+        else:
+            print("Opps, try again either 1,2 or 3")
+
 
 
 
@@ -46,8 +60,12 @@ def cuisineRecipeSearch():
                 print(row)
 
 
+
+
+
 def main():
-    print("Weclome to the Recepie Manager!")
+    print_pause("Weclome to the Recepie Manager!")
+    print_pause("we have thousands of recepies you can look into ")
     startManager()
 
 main()
