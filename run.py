@@ -35,19 +35,24 @@ def startManager():
             print("Opps, try again either 1,2 or 3")
 
 def addRecipe():
-    name = input("Please Enter the recipes name: ").strip()
-    ingredients = input("Please Enter the ringredients: ").strip()
-    instructions = input("Enter in the recipes instructions : ").strip()
-    time = input("Total time it takes to cook : ").strip()
-    servings = input("Total Servings : ").strip()
-    cuisine = input("What cuisine is it? : ").strip()
-    dietaryRestrictions = input("Any Dietary restrictions? : ").strip()
-    rating =  input("Finally, how good is it. Give it a rating out of 5!: ").strip()
+        name = input("Please Enter the Recipes name: ").strip()
+        ingredients = input("Please Enter the Ingredients: ").strip()
+        instructions = input("Enter in the recipes instructions : ").strip()
+        time = input("Total time it takes to cook : ").strip()
+        servings = input("Total Servings : ").strip()
+        cuisine = input("What cuisine is it? : ").strip()
+        dietaryRestrictions = input("Any Dietary restrictions? : ").strip()
+        rating =  input("Finally, how good is it. Give it a rating out of 5!: ").strip()
 
+        if not name:
+            raise ValueError("Recipe name cannot be empty")
+        
+        next_row = len(data) + 2
 
-    values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating]]
-    worksheet.insert_rows(values, row=42)
-    print("Recipe added successfully!")
+        values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating]]
+        worksheet.insert_rows(values, row=next_row)
+        print("Recipe added successfully!")
+
 
 
 
