@@ -25,8 +25,7 @@ def startManager():
             addRecipe()
             break
         elif startAnswer.lower() == "2":
-            selected_column = input("")
-            recipeSearch(data, selected_column)
+            findRecipe()
             break
         elif startAnswer.lower() == "3":
             print("Meal Plan")
@@ -35,6 +34,9 @@ def startManager():
             print("Opps, try again either 1,2 or 3")
 
 def addRecipe():
+        """
+        Allows the user to add a new recipe based on the pre existing columns
+        """
         name = input("Please Enter the Recipes name: ").strip()
         ingredients = input("Please Enter the Ingredients: ").strip()
         instructions = input("Enter in the recipes instructions : ").strip()
@@ -52,29 +54,19 @@ def addRecipe():
         values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating]]
         worksheet.insert_rows(values, row=next_row)
         print("Recipe added successfully!")
+    
+        startManager()
 
 
+def findRecipe():
+    
+    columnList = ["(1) Name","(2) Total Time","(3) Cuisine","(4) Dietary Restrictions", "(3)Rating"]
+    print("How would you like to search for a new recipe?")
+    print(*columnList, sep="\n")
 
-
-def recipeSearch(data, column_name):
-    matching_rows = [row for row in data if row.get(column_name) == {column_name}]
-
-    if not matching_rows:
-        print(f"Sorry, there's nothing in our database under {column_name} based on {column_name}")
-    else:
-        print(f"Please see all recipes associated with {column_name}")
-        for row in matching_rows:
-            print(row)
-
-    while True:
-        recipe_columns = ["Name", "Total Time", "Cuisine", "Dietary Restrictions"]
-        for index, recipe_column in enumerate(recipe_columns, start=1):
-            print(f"{index}. {recipe_column}")
-
-
-
-
-
+    
+    values_list = worksheet.col_values(5)
+    print(values_list)
 
 
 def main():
