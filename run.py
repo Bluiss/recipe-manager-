@@ -28,7 +28,7 @@ def startManager():
             findRecipe()
             break
         elif startAnswer.lower() == "3":
-            print("Meal Plan")
+            deleteRecipe()
             break
         else:
             print("Opps, try again either 1,2 or 3")
@@ -59,14 +59,34 @@ def addRecipe():
 
 
 def findRecipe():
-    
-    columnList = ["(1) Name","(2) Total Time","(3) Cuisine","(4) Dietary Restrictions", "(3)Rating"]
-    print("How would you like to search for a new recipe?")
-    print(*columnList, sep="\n")
+    """
+    It specifies the name of the column you want to search in (e.g., "Name") and the value you want to search for (e.g., "chicken").
 
+    It finds the index of the specified column by iterating through the headers in the first row of the worksheet. The comparison is case-insensitive.
+
+    If the specified column is found, it searches for the value in that column within each row and appends matching rows to the found_rows list. The comparison is case-insensitive.
+
+    If any matching rows are found, it prints them. Otherwise, it prints a message indicating that no rows contain the specified value in the specified column.
+    """
     
-    values_list = worksheet.col_values(5)
-    print(values_list)
+   
+
+
+def deleteRecipe():
+    """
+    Deletes a recipe from the databse, by searching for its name
+    """
+    deleteSearch = input("What recipe would you like to delete?: ").lower()
+
+    deleteFound = []
+    for row in worksheet.get_all_values():
+        row_lower = [cell.lower() for cell in row]
+        if deleteSearch in row_lower:
+            deleteFound.append(row)
+
+
+    for found_row in deleteFound:
+        print(found_row)
 
 
 def main():
