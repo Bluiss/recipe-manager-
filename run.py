@@ -60,16 +60,34 @@ def addRecipe():
 
 def findRecipe():
     """
-    It specifies the name of the column you want to search in (e.g., "Name") and the value you want to search for (e.g., "chicken").
-
-    It finds the index of the specified column by iterating through the headers in the first row of the worksheet. The comparison is case-insensitive.
-
-    If the specified column is found, it searches for the value in that column within each row and appends matching rows to the found_rows list. The comparison is case-insensitive.
-
-    If any matching rows are found, it prints them. Otherwise, it prints a message indicating that no rows contain the specified value in the specified column.
+    searches through all the columns for a specifc recipe 
     """
+    column_search_name = input("How would you like to search through the recipes?: ")
+    search_value = input("What are you searching for?: ")
+
+    found_rows = []
+    column_index = None
+
+    for col, header in enumerate(worksheet.get_all_values()[0]):
+        if header.lower() == column_search_name.lower(): 
+            column_index = col
+        break
+
+    if column_index is not None:
+        for row in worksheet.get_all_values():
+            if row[column_index].lower() == search_value.lower():
+                found_rows.append(row)
     
-   
+        if found_rows:
+            for found_row in found_rows:
+                print(found_row)
+        
+        else:
+            print(f"Sorry, theres no rows in '{column_search_name}' column that contain '{search_value}'.")
+
+    
+    else:
+        print(f"{column_search_name}' not found in the database.")
 
 
 def deleteRecipe():
