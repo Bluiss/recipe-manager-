@@ -20,18 +20,29 @@ def startManager():
     Allows user to either search/create a recipe or creat a weekly meal plan 
     """
     while True:
-        startAnswer = input("what would you like to do?\n (1)Create a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
+        startAnswer = input("what would you like to do?\n (1)Add or Remove a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
         if startAnswer.lower() == "1":
-            addRecipe()
+            addRemoveRecipe()
             break
         elif startAnswer.lower() == "2":
             findRecipe()
             break
         elif startAnswer.lower() == "3":
-            deleteRecipe()
             break
         else:
             print("Opps, try again either 1,2 or 3")
+
+def addRemoveRecipe():
+    """
+    starts either ther add or remove recipe functions
+    """
+    ar = input("Would you like to add or remove a recipe? \n(1)Add \n(2)Remove\n")
+    if ar == "1":
+        addRecipe()
+    elif ar == "2":
+        deleteRecipe()
+
+
 
 def addRecipe():
         """
