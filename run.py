@@ -96,17 +96,35 @@ def deleteRecipe():
     """
     Deletes a recipe from the databse, by searching for its name
     """
-    deleteSearch = input("What recipe would you like to delete?: ").lower()
+    deleteSearch = input("What recipe would you like to delete?: ").lower().replace(" ", "")
 
     deleteFound = []
-    for row in worksheet.get_all_values():
+    for index, row in enumerate(worksheet.get_all_values(), start=1):
         row_lower = [cell.lower() for cell in row]
         if deleteSearch in row_lower:
-            deleteFound.append(row)
+            deleteFound.append(index)
 
 
-    for found_row in deleteFound:
-        print(found_row)
+    for found_row_index in deleteFound:
+        print(worksheet.row_values(found_row_index))
+        delete_answer = input("Would you like to delete this recipe? Y/N")
+
+        if delete_answer.upper() == "Y":
+            worksheet.delete_rows(found_row_index)
+            print("Recipe deleted.")
+            startManager()
+        else:
+            deleteReset()
+    
+def deleteReset():
+    delete_answer_input = input("Did you still want to delete a recipe? Y/N")
+    if delete_answer_input.upper() == "Y":
+        deleteRecipe()
+    else:
+        startManager()
+
+
+
 
 
 def main():
