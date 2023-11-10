@@ -1,5 +1,6 @@
 import gspread
 import time
+import random
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
@@ -28,6 +29,7 @@ def startManager():
             findRecipe()
             break
         elif startAnswer.lower() == "3":
+            mealPlanner(worksheet.get_all_records(default_blank=True))
             break
         else:
             print("Opps, try again either 1,2 or 3")
@@ -134,6 +136,29 @@ def deleteReset():
     else:
         startManager()
 
+
+def mealPlanner(data):
+    """
+    Meal plan for a specific amount of days input by the user
+    """
+    while True:
+        days_input = int(input("How many days do you need meals for? "))
+        if days_input in range(1, 8):
+            days_list = generate_days_list(days_input)
+            print("Meal plan for the following days:")
+            for day in days_list:
+                print(f"Day {day}")
+            break 
+        else:
+            print("Please select a plan between 1 & 7 days")
+
+def generate_days_list(days_input):
+    i = 1
+    dlist = []
+    while i <= days_input:
+        dlist.append(i)
+        i += 1
+    return dlist
 
 
 
