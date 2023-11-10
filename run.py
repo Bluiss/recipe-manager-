@@ -62,8 +62,8 @@ def findRecipe():
     """
     searches through all the columns for a specifc recipe 
     """
-    column_search_name = input("How would you like to search through the recipes?: ")
-    search_value = input("What are you searching for?: ")
+    column_search_name = input("How would you like to search through the recipes? \n Name \n Cook Time \n Cuisine \n Dietary Restrictions \n ")
+    search_value = input("What are you searching for?: ").lower().replace(" ", "")
 
     found_rows = []
     column_index = None
@@ -71,11 +71,11 @@ def findRecipe():
     for col, header in enumerate(worksheet.get_all_values()[0]):
         if header.lower() == column_search_name.lower(): 
             column_index = col
-        break
+            break
 
     if column_index is not None:
         for row in worksheet.get_all_values():
-            if row[column_index].lower() == search_value.lower():
+            if row[column_index].lower() == search_value:
                 found_rows.append(row)
     
         if found_rows:
@@ -88,6 +88,8 @@ def findRecipe():
     
     else:
         print(f"{column_search_name}' not found in the database.")
+
+    startManager()
 
 
 def deleteRecipe():
