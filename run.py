@@ -1,10 +1,13 @@
 import gspread
 import time
 import random
+import pandas as pd
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from rich.console import Console
 from rich.table import Table
+
+
 
 console = Console()
 
@@ -13,22 +16,23 @@ sa = gspread.service_account(filename='creds.json')
 sh = sa.open("recipe_manager")
 worksheet = sh.worksheet('Sheet1')
 data = worksheet.get_all_records(default_blank=True)
+df = pd.DataFrame(worksheet.get_all_records())
 
-def displayTable(header, rows ,title="Recipes"):
+def displayTable(header, rows, title="Recipes"):
     table = Table(title=title)
 
     for column in header:
         table.add_column(column)
-    
-    if isinstance(rows[0], dict):
+
+    if isinstance(rows, list):
         for row in rows:
             row_values = [str(row.get(column, "")) for column in header]
             table.add_row(*row_values)
-    else:
-        for row in rows:
-            table.add_row(*row)
+    elif isinstance(rows, dict):
+        row_values = [str(rows.get(column, "")) for column in header]
+        table.add_row(*row_values)
 
-    console.print(table)    
+    console.print(table)
 
 
 def print_pause(message):
@@ -133,32 +137,17 @@ def deleteRecipe():
     """
     Deletes a recipe from the databse, by searching for its name
     """
-    deleteSearch = input("What recipe would you like to delete?: ").lower().replace(" ", "")
+    deleteSearch = input("What recipe would you like to delete?: ")
 
-    deleteFound = []
-    for index, row in enumerate(worksheet.get_all_values(), start=1):
-        row_lower = [cell.lower() for cell in row]
-        if deleteSearch in row_lower:
-            deleteFound.append(index)
+    deleteFound = df[df['Name'].str.contains(deleteSearch, case=False, na=False)].to_dict(orient='records')
 
-
-    for found_row_index in deleteFound:
-        print(worksheet.row_values(found_row_index))
-        delete_answer = input("Would you like to delete this recipe? Y/N")
-
-        if delete_answer.upper() == "Y":
-            worksheet.delete_rows(found_row_index)
-            print("Recipe deleted.")
-            startManager()
-        else:
-            deleteReset()
-    
-def deleteReset():
-    delete_answer_input = input("Did you still want to delete a recipe? Y/N")
-    if delete_answer_input.upper() == "Y":
-        deleteRecipe()
+    if deleteFound:
+        displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], deleteFound, "Recipes")
     else:
-        startManager()
+        print("Sorry, theres no recipes matching that input.")
+
+
+   
 
 
 def mealPlanner(data):
