@@ -14,15 +14,19 @@ sh = sa.open("recipe_manager")
 worksheet = sh.worksheet('Sheet1')
 data = worksheet.get_all_records(default_blank=True)
 
-def displayTable(header, rows, title="Recipes"):
+def displayTable(header, rows ,title="Recipes"):
     table = Table(title=title)
 
     for column in header:
         table.add_column(column)
     
-    for row in rows:
-        row_values = [str(row.get(column, "")) for column in header]
-        table.add_row(*row_values)
+    if isinstance(rows[0], dict):
+        for row in rows:
+            row_values = [str(row.get(column, "")) for column in header]
+            table.add_row(*row_values)
+    else:
+        for row in rows:
+            table.add_row(*row)
 
     console.print(table)    
 
@@ -36,7 +40,7 @@ def startManager():
     Allows user to either search/create a recipe or creat a weekly meal plan 
     """
     while True:
-        startAnswer = input("what would you like to do?\n (1)Add or Remove a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
+        startAnswer = input("What would you like to do?\n (1)Add or Remove a recipe?\n (2)Search for a Recipe?\n (3)Meal plan a week?\n")
         if startAnswer.lower() == "1":
             addRemoveRecipe()
             break
@@ -81,7 +85,11 @@ def addRecipe():
 
         values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating]]
         worksheet.insert_rows(values, row=next_row)
+
+        message = f"Thanks for adding {name} to our database!"
+        displayTable(worksheet.row_values(1), values, message )
         print("Recipe added successfully!")
+        
     
         startManager()
 
