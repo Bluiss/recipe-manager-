@@ -3,6 +3,10 @@ import time
 import random
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from rich.console import Console
+from rich.table import Table
+
+console = Console()
 
 
 sa = gspread.service_account(filename='creds.json')
@@ -10,10 +14,21 @@ sh = sa.open("recipe_manager")
 worksheet = sh.worksheet('Sheet1')
 data = worksheet.get_all_records(default_blank=True)
 
+def displayTable(header, rows, title="Recipes"):
+    table = Table(title=title)
+
+    for column in header:
+        table.add_column(column)
+    
+    for row in rows:
+        row_values = [str(row.get(column, "")) for column in header]
+        table.add_row(*row_values)
+
+    console.print(table)    
 
 
 def print_pause(message):
-    print(message)
+    console.print("[blue underline]" + message)
     time.sleep(1)
 
 def startManager():
@@ -92,8 +107,9 @@ def findRecipe():
                 found_rows.append(row)
     
         if found_rows:
-            for found_row in found_rows:
-                print(found_row)
+            header = worksheet.get_all_values()[0]
+            displayTable(header, found_rows)
+
         
         else:
             print(f"Sorry, theres no rows in '{column_search_name}' column that contain '{search_value}'.")
@@ -141,9 +157,7 @@ def mealPlanner(data):
     """
     Meal plan for a specific amount of days input by the user (Source 1)
     """
-    
     while True:
-
         days_input = int(input("How many days do you need meals for? "))
         if days_input in range(1, 8):
             days_list = generate_days_list(days_input)
@@ -151,7 +165,7 @@ def mealPlanner(data):
             for day in days_list:
                 random.shuffle(data)
                 random_rows = data[:3]
-                print(f"Day {day, random_rows}")
+                displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], random_rows, f"Day {day}")
             break 
         else:
             print("Please select a plan between 1 & 7 days")
