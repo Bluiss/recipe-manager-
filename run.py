@@ -139,15 +139,19 @@ def deleteReset():
 
 def mealPlanner(data):
     """
-    Meal plan for a specific amount of days input by the user
+    Meal plan for a specific amount of days input by the user (Source 1)
     """
+    
     while True:
+
         days_input = int(input("How many days do you need meals for? "))
         if days_input in range(1, 8):
             days_list = generate_days_list(days_input)
             print("Meal plan for the following days:")
             for day in days_list:
-                print(f"Day {day}")
+                random.shuffle(data)
+                random_rows = data[:3]
+                print(f"Day {day, random_rows}")
             break 
         else:
             print("Please select a plan between 1 & 7 days")
@@ -160,7 +164,7 @@ def generate_days_list(days_input):
         i += 1
     return dlist
 
-
+    
 
 
 def main():
