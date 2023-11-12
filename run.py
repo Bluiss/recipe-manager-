@@ -14,7 +14,8 @@ console = Console()
 
 sa = gspread.service_account(filename='creds.json')
 sh = sa.open("recipe_manager")
-worksheet = sh.worksheet('Sheet1')
+worksheet = sh.worksheet('Recipes')
+worksheet_favourites = sh.worksheet('Favourites')
 data = worksheet.get_all_records(default_blank=True)
 df = pd.DataFrame(worksheet.get_all_records())
 
@@ -26,13 +27,15 @@ def displayTable(header, rows, title="Recipes"):
 
     if isinstance(rows, list):
         for row in rows:
-            row_values = [str(row.get(column, "")) for column in header]
-            table.add_row(*row_values)
+            if isinstance(row, dict):
+                row_values = [str(row.get(column, "")) for column in header]
+                table.add_row(*row_values)
     elif isinstance(rows, dict):
         row_values = [str(rows.get(column, "")) for column in header]
         table.add_row(*row_values)
 
     console.print(table)
+
 
 
 def print_pause(message):
@@ -108,27 +111,58 @@ def findRecipe():
         if column_search_name.lower() == "1":
             nameSearch = input("Whats the recipes name?: ")
             searched_name = df[df['Name'].str.contains(nameSearch, case=False, na=False)].to_dict(orient='records')
-            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searched_name, "Recipes")
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], searched_name, "Recipes")
             break
         elif column_search_name.lower() == "2":
             timeSearch = input("How long have you got to cook? Eg 10 mins: ")
             searched_time = df[df['Cook Time'].str.contains(timeSearch, case=False, na=False)].to_dict(orient='records')
-            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searched_time, "Recipes")
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating","ID"], searched_time, "Recipes")
             break
         elif column_search_name.lower() == "3":
             cuisineSearch = input("Searching by cuisine? what are you after: ")
             searchedCuisine = df[df['Cuisine'].str.contains(cuisineSearch, case=False, na=False)].to_dict(orient='records')
-            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searchedCuisine, "Recipes")
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], searchedCuisine, "Recipes")
             break
         elif column_search_name.lower() == "4":
             drSearch = input("Have specific restrictions? Eg Vegetarian, Gluten Free..: ")
             searched_dr = df[df['Dietary Restrictions'].str.contains(drSearch, case=False, na=False)].to_dict(orient='records')
-            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searched_dr, "Recipes")
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], searched_dr, "Recipes")
             break
         else:
             print("Opps, try again either 1,2,3 or 4")
 
-    startManager()
+    recipeFound()
+
+
+def recipeFound():
+    while True:
+        recipe_found_input= input("Found what you're after?\n(1)Yes let me favourite it\n(2)No I'll try again\n")
+        if recipe_found_input.lower() == "1":
+            favouriteRecipe()
+            break
+        elif recipe_found_input.lower() == "2":
+            findRecipe()
+            break
+       
+        else:
+            print("Oops, try again with 1 or 2")
+
+def favouriteRecipe():
+    """
+    Allows the user to select a favourite recipe and saves it to a list and sheet
+    """
+    id_search = input("Whats the ID of the recipe you want to save?: ")
+    if int(id_search) in df.index:
+        recipe_data = df.shift(periods=1).loc[[int(id_search)]]
+        recipe_name = recipe_data['Name'].iloc[0]
+        fav_message = f"You've added {recipe_name} to your favourites list, must be a tasty one!"
+        displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], recipe_data, fav_message)
+        worksheet_favourites.append_row(recipe_data.values.tolist()[0])
+        print("Recipe added Sucessfully")
+
+    else:
+        print("Recipe not found with the provided ID.")
+
 
 
 def deleteRecipe():
