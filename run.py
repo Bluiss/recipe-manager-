@@ -70,6 +70,14 @@ def addRemoveRecipe():
     elif ar == "2":
         deleteRecipe()
 
+def idGenerate():
+    """
+    generates a random ID and checks against ID column in sheets, if false assigns value to new recipe
+    """
+    while True: 
+        random_id = random.randint(1, 999)
+        if(random_id in df['ID'].unique()) == False:
+            return random_id
 
 
 def addRecipe():
@@ -84,13 +92,11 @@ def addRecipe():
         cuisine = input("What cuisine is it? : ").strip()
         dietaryRestrictions = input("Any Dietary restrictions? : ").strip()
         rating =  input("Finally, how good is it. Give it a rating out of 5!: ").strip()
-
-        if not name:
-            raise ValueError("Recipe name cannot be empty")
+        ID = idGenerate()
         
         next_row = len(data) + 2
 
-        values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating]]
+        values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating, ID]]
         worksheet.insert_rows(values, row=next_row)
 
         message = f"Thanks for adding {name} to our database!"
@@ -99,6 +105,8 @@ def addRecipe():
         
     
         startManager()
+
+
 
 def searchRecipe():
    """
@@ -198,6 +206,8 @@ def deleteRecipe():
 
     if deleteFound:
         displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], deleteFound, "Recipes")
+        worksheet.delete_rows([int(entry['row_index']) for entry in deleteFound])
+
     else:
         print("Sorry, theres no recipes matching that input.")
 
