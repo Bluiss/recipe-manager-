@@ -102,33 +102,31 @@ def findRecipe():
     """
     searches through all the columns for a specifc recipe 
     """
-    column_search_name = input("How would you like to search through the recipes? \n Name \n Cook Time \n Cuisine \n Dietary Restrictions \n ")
-    search_value = input("What are you searching for?: ").lower().replace(" ", "")
 
-    found_rows = []
-    column_index = None
-
-    for col, header in enumerate(worksheet.get_all_values()[0]):
-        if header.lower() == column_search_name.lower(): 
-            column_index = col
+    while True:
+        column_search_name = input("How would you like to search through the recipes? \n (1)Name \n (2)Cook Time \n (3)Cuisine \n (4)Dietary Restrictions \n ")
+        if column_search_name.lower() == "1":
+            nameSearch = input("Whats the recipes name?: ")
+            searched_name = df[df['Name'].str.contains(nameSearch, case=False, na=False)].to_dict(orient='records')
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searched_name, "Recipes")
             break
-
-    if column_index is not None:
-        for row in worksheet.get_all_values():
-            if row[column_index].lower() == search_value:
-                found_rows.append(row)
-    
-        if found_rows:
-            header = worksheet.get_all_values()[0]
-            displayTable(header, found_rows)
-
-        
+        elif column_search_name.lower() == "2":
+            timeSearch = input("How long have you got to cook? Eg 10 mins: ")
+            searched_time = df[df['Cook Time'].str.contains(timeSearch, case=False, na=False)].to_dict(orient='records')
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searched_time, "Recipes")
+            break
+        elif column_search_name.lower() == "3":
+            cuisineSearch = input("Searching by cuisine? what are you after: ")
+            searchedCuisine = df[df['Cuisine'].str.contains(cuisineSearch, case=False, na=False)].to_dict(orient='records')
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searchedCuisine, "Recipes")
+            break
+        elif column_search_name.lower() == "4":
+            drSearch = input("Have specific restrictions? Eg Vegetarian, Gluten Free..: ")
+            searched_dr = df[df['Dietary Restrictions'].str.contains(drSearch, case=False, na=False)].to_dict(orient='records')
+            displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], searched_dr, "Recipes")
+            break
         else:
-            print(f"Sorry, theres no rows in '{column_search_name}' column that contain '{search_value}'.")
-
-    
-    else:
-        print(f"{column_search_name}' not found in the database.")
+            print("Opps, try again either 1,2,3 or 4")
 
     startManager()
 
