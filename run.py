@@ -52,7 +52,7 @@ def startManager():
             addRemoveRecipe()
             break
         elif startAnswer.lower() == "2":
-            findRecipe()
+            searchRecipe()
             break
         elif startAnswer.lower() == "3":
             mealPlanner(worksheet.get_all_records(default_blank=True))
@@ -100,12 +100,28 @@ def addRecipe():
     
         startManager()
 
+def searchRecipe():
+   """
+   Starts either find new recipe or shows all favourited recipes 
+   """
+   while True:
+        user_choice = input("Finding a favorite or looking for something new?\n(1) Find New Recipe\n(2) View all favorited recipes\n(3) Exit\n")
+        if user_choice == "1":
+            startManager()
+        elif user_choice == "2":
+            favouriteRecipe()
+        elif user_choice == "3":
+            print_pause("Goodbye!")
+            startManager()
+            break
+        else:
+            print("Oops, try again with 1, 2, or 3")
+
 
 def findRecipe():
     """
     searches through all the columns for a specifc recipe 
     """
-
     while True:
         column_search_name = input("How would you like to search through the recipes? \n (1)Name \n (2)Cook Time \n (3)Cuisine \n (4)Dietary Restrictions \n ")
         if column_search_name.lower() == "1":
@@ -163,6 +179,13 @@ def favouriteRecipe():
     else:
         print("Recipe not found with the provided ID.")
 
+def viewAllFavourites():
+    """
+    Prints all rows from favourites worksheet
+    """
+    all_favourites = worksheet_favourites.get_all_records()
+    displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], all_favourites, "Favourites")
+
 
 
 def deleteRecipe():
@@ -199,6 +222,15 @@ def mealPlanner(data):
         else:
             print("Please select a plan between 1 & 7 days")
 
+    while True:
+        user_choice = input("Plenty of meals for {day} days, or did you need some more?\n(1)No all good, take me back to the main page\n(2)Need some more meals ")
+        if user_choice == "1":
+            startManager()
+        elif user_choice == "2":
+            mealPlanner(data)
+        else:
+            print("Oops, try again with 1 or 2")
+
 def generate_days_list(days_input):
     i = 1
     dlist = []
@@ -206,6 +238,7 @@ def generate_days_list(days_input):
         dlist.append(i)
         i += 1
     return dlist
+
 
     
 
