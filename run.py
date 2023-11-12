@@ -115,9 +115,9 @@ def searchRecipe():
    while True:
         user_choice = input("Finding a favorite or looking for something new?\n(1) Find New Recipe\n(2) View all favorited recipes\n(3) Exit\n")
         if user_choice == "1":
-            startManager()
+            findRecipe()
         elif user_choice == "2":
-            favouriteRecipe()
+            viewAllFavourites()
         elif user_choice == "3":
             print_pause("Goodbye!")
             startManager()
@@ -205,13 +205,28 @@ def deleteRecipe():
     deleteFound = df[df['Name'].str.contains(deleteSearch, case=False, na=False)].to_dict(orient='records')
 
     if deleteFound:
-        displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], deleteFound, "Recipes")
-        worksheet.delete_rows([int(entry['row_index']) for entry in deleteFound])
+        displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], deleteFound, "Recipes")
+        deleteFoundRecipe()
 
     else:
         print("Sorry, theres no recipes matching that input.")
 
+def deleteFoundRecipe():
+    """
+    Takes id from user input and deltes related recipe
+    """
+    delete_search = input("Whats the ID of the recipe you want to delete?: ")
+    if int(delete_search) in df.index:
+        delete_data = df.shift(periods=1).loc[[int(delete_search)]]
+        recipe_name = delete_data['Name'].iloc[0]
+        delete_message = f"{recipe_name} will be been removed from the database"
+        displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], delete_data, delete_message)
+        worksheet.delete_row(int(delete_data.index[0]))
 
+        print("Recipe deleted Sucessfully")
+
+    else:
+        print("Recipe not found with the provided ID.")
    
 
 
@@ -227,7 +242,7 @@ def mealPlanner(data):
             for day in days_list:
                 random.shuffle(data)
                 random_rows = data[:3]
-                displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating"], random_rows, f"Day {day}")
+                displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], random_rows, f"Day {day}")
             break 
         else:
             print("Please select a plan between 1 & 7 days")
