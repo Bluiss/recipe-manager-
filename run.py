@@ -30,12 +30,13 @@ def displayTable(header, rows, title="Recipes"):
             if isinstance(row, dict):
                 row_values = [str(row.get(column, "")) for column in header]
                 table.add_row(*row_values)
+            elif isinstance(row, list):
+                table.add_row(*map(str, row))
     elif isinstance(rows, dict):
         row_values = [str(rows.get(column, "")) for column in header]
         table.add_row(*row_values)
 
     console.print(table)
-
 
 
 def print_pause(message):
@@ -81,9 +82,10 @@ def idGenerate():
 
 
 def addRecipe():
-        """
-        Allows the user to add a new recipe based on the pre existing columns
-        """
+    """
+    Allows the user to add a new recipe based on the pre-existing columns
+    """
+    while True:
         name = input("Please Enter the Recipes name: ").strip()
         ingredients = input("Please Enter the Ingredients: ").strip()
         instructions = input("Enter in the recipes instructions : ").strip()
@@ -91,20 +93,25 @@ def addRecipe():
         servings = input("Total Servings : ").strip()
         cuisine = input("What cuisine is it? : ").strip()
         dietaryRestrictions = input("Any Dietary restrictions? : ").strip()
-        rating =  input("Finally, how good is it. Give it a rating out of 5!: ").strip()
+        rating = input("Finally, how good is it. Give it a rating out of 5!: ").strip()
         ID = idGenerate()
-        
+
         next_row = len(data) + 2
 
-        values = [[name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating, ID]]
-        worksheet.insert_rows(values, row=next_row)
+        values = [name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating, ID]
+        worksheet.insert_rows([values], row=next_row)
 
         message = f"Thanks for adding {name} to our database!"
-        displayTable(worksheet.row_values(1), values, message )
+        console.print("[blue underline]" + message)  
+
+        displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], [values], "Added Recipe")
+
         print("Recipe added successfully!")
-        
-    
-        startManager()
+
+        another_recipe = input("Do you want to add another recipe? (yes/no): ").lower()
+        if another_recipe != 'yes':
+            startManager()
+            break
 
 
 
