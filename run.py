@@ -25,7 +25,11 @@ def displayTable(header, rows, title="Recipes"):
     for column in header:
         table.add_column(column)
 
-    if isinstance(rows, list):
+    if isinstance(rows, pd.DataFrame):
+        for _, row in rows.iterrows():
+            row_values = [str(row[column]) for column in header]
+            table.add_row(*row_values)
+    elif isinstance(rows, list):
         for row in rows:
             if isinstance(row, dict):
                 row_values = [str(row.get(column, "")) for column in header]
@@ -167,32 +171,35 @@ def findRecipe():
 
 def recipeFound():
     while True:
-        recipe_found_input= input("Found what you're after?\n(1)Yes let me favourite it\n(2)No I'll try again\n")
+        recipe_found_input= input("Found what you're after?\n(1)Yes let me favourite it\n(2)No I'll try again\n(3)Exit")
         if recipe_found_input.lower() == "1":
             favouriteRecipe()
             break
         elif recipe_found_input.lower() == "2":
             findRecipe()
             break
+        elif recipe_found_input == "3":
+            print_pause("Goodbye!")
+            startManager()
+            break
        
         else:
             print("Oops, try again with 1 or 2")
 
 def favouriteRecipe():
-    """
-    Allows the user to select a favourite recipe and saves it to a list and sheet
-    """
     id_search = input("Whats the ID of the recipe you want to save?: ")
-    if int(id_search) in df.index:
-        recipe_data = df.shift(periods=1).loc[[int(id_search)]]
+    id_search = int(id_search)
+
+    if id_search in df['ID'].values:
+        recipe_data = df[df['ID'] == id_search]
         recipe_name = recipe_data['Name'].iloc[0]
         fav_message = f"You've added {recipe_name} to your favourites list, must be a tasty one!"
         displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], recipe_data, fav_message)
         worksheet_favourites.append_row(recipe_data.values.tolist()[0])
-        print("Recipe added Sucessfully")
-
+        print("Recipe added Successfully")
     else:
         print("Recipe not found with the provided ID.")
+
 
 def viewAllFavourites():
     """
@@ -229,6 +236,7 @@ def deleteFoundRecipe():
         delete_message = f"{recipe_name} will be been removed from the database"
         displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], delete_data, delete_message)
         worksheet.delete_row(int(delete_data.index[0]))
+        print(delete_search)
 
         print("Recipe deleted Sucessfully")
 
