@@ -90,14 +90,14 @@ def addRecipe():
     Allows the user to add a new recipe based on the pre-existing columns
     """
     while True:
-        name = input("Please Enter the Recipes name: ").strip()
-        ingredients = input("Please Enter the Ingredients: ").strip()
-        instructions = input("Enter in the recipes instructions : ").strip()
-        time = input("Total time it takes to cook : ").strip()
-        servings = input("Total Servings : ").strip()
-        cuisine = input("What cuisine is it? : ").strip()
-        dietaryRestrictions = input("Any Dietary restrictions? : ").strip()
-        rating = input("Finally, how good is it. Give it a rating out of 5!: ").strip()
+        name = input("Please Enter the Recipes name: \n").strip()
+        ingredients = input("Please Enter the Ingredients: \n").strip()
+        instructions = input("Enter in the recipes instructions : \n").strip()
+        time = input("Total time it takes to cook :\n ").strip()
+        servings = input("Total Servings : \n").strip()
+        cuisine = input("What cuisine is it? : \n").strip()
+        dietaryRestrictions = input("Any Dietary restrictions? : \n").strip()
+        rating = input("Finally, how good is it. Give it a rating out of 5!: \n").strip()
         ID = idGenerate()
 
         next_row = len(data) + 2
@@ -112,7 +112,7 @@ def addRecipe():
 
         print("Recipe added successfully!")
 
-        another_recipe = input("Do you want to add another recipe? (yes/no): ").lower()
+        another_recipe = input("Do you want to add another recipe? (yes/no): \n").lower()
         if another_recipe != 'yes':
             startManager()
             break
@@ -144,22 +144,22 @@ def findRecipe():
     while True:
         column_search_name = input("How would you like to search through the recipes? \n (1)Name \n (2)Cook Time \n (3)Cuisine \n (4)Dietary Restrictions \n ")
         if column_search_name.lower() == "1":
-            nameSearch = input("Whats the recipes name?: ")
+            nameSearch = input("Whats the recipes name?: \n")
             searched_name = df[df['Name'].str.contains(nameSearch, case=False, na=False)].to_dict(orient='records')
             displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], searched_name, "Recipes")
             break
         elif column_search_name.lower() == "2":
-            timeSearch = input("How long have you got to cook? Eg 10 mins: ")
+            timeSearch = input("How long have you got to cook? Eg 10 mins:\n ")
             searched_time = df[df['Cook Time'].str.contains(timeSearch, case=False, na=False)].to_dict(orient='records')
             displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating","ID"], searched_time, "Recipes")
             break
         elif column_search_name.lower() == "3":
-            cuisineSearch = input("Searching by cuisine? what are you after: ")
+            cuisineSearch = input("Searching by cuisine? what are you after:\n ")
             searchedCuisine = df[df['Cuisine'].str.contains(cuisineSearch, case=False, na=False)].to_dict(orient='records')
             displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], searchedCuisine, "Recipes")
             break
         elif column_search_name.lower() == "4":
-            drSearch = input("Have specific restrictions? Eg Vegetarian, Gluten Free..: ")
+            drSearch = input("Have specific restrictions? Eg Vegetarian, Gluten Free..:\n ")
             searched_dr = df[df['Dietary Restrictions'].str.contains(drSearch, case=False, na=False)].to_dict(orient='records')
             displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], searched_dr, "Recipes")
             break
@@ -171,7 +171,7 @@ def findRecipe():
 
 def recipeFound():
     while True:
-        recipe_found_input= input("Found what you're after?\n(1)Yes let me favourite it\n(2)No I'll try again\n(3)Exit")
+        recipe_found_input= input("Found what you're after?\n(1)Yes let me favourite it\n(2)No I'll try again\n(3)Exit\n")
         if recipe_found_input.lower() == "1":
             favouriteRecipe()
             break
@@ -187,7 +187,7 @@ def recipeFound():
             print("Oops, try again with 1 or 2")
 
 def favouriteRecipe():
-    id_search = input("Whats the ID of the recipe you want to save?: ")
+    id_search = input("Whats the ID of the recipe you want to save?:\n ")
     id_search = int(id_search)
 
     if id_search in df['ID'].values:
@@ -214,7 +214,7 @@ def deleteRecipe():
     """
     Deletes a recipe from the databse, by searching for its name
     """
-    deleteSearch = input("What recipe would you like to delete?: ")
+    deleteSearch = input("What recipe would you like to delete?: \n")
 
     deleteFound = df[df['Name'].str.contains(deleteSearch, case=False, na=False)].to_dict(orient='records')
 
@@ -229,7 +229,7 @@ def deleteFoundRecipe():
     """
     Takes id from user input and deltes related recipe
     """
-    delete_search = int(input("Whats the ID of the recipe you want to delete?: "))
+    delete_search = int(input("Whats the ID of the recipe you want to delete?:\n "))
     if delete_search in df['ID'].values:
         # delete_data = df.shift(periods=1).loc[[int(delete_search)]]
         delete_data = df[df['ID'] == delete_search].copy()
@@ -252,7 +252,7 @@ def mealPlanner(data):
     Meal plan for a specific amount of days input by the user (Source 1)
     """
     while True:
-        days_input = int(input("How many days do you need meals for? "))
+        days_input = int(input("How many days do you need meals for? \n"))
         if days_input in range(1, 8):
             days_list = generate_days_list(days_input)
             print("Meal plan for the following days:")
@@ -265,7 +265,7 @@ def mealPlanner(data):
             print("Please select a plan between 1 & 7 days")
 
     while True:
-        user_choice = input("Plenty of meals for {day} days, or did you need some more?\n(1)No all good, take me back to the main page\n(2)Need some more meals ")
+        user_choice = input("Plenty of meals for {} days, or did you need some more?\n(1) No, all good, take me back to the main page\n(2) Need some more meals \n".format(day))
         if user_choice == "1":
             startManager()
         elif user_choice == "2":
