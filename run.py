@@ -229,14 +229,16 @@ def deleteFoundRecipe():
     """
     Takes id from user input and deltes related recipe
     """
-    delete_search = input("Whats the ID of the recipe you want to delete?: ")
-    if int(delete_search) in df.index:
-        delete_data = df.shift(periods=1).loc[[int(delete_search)]]
+    delete_search = int(input("Whats the ID of the recipe you want to delete?: "))
+    if delete_search in df['ID'].values:
+        # delete_data = df.shift(periods=1).loc[[int(delete_search)]]
+        delete_data = df[df['ID'] == delete_search].copy()
         recipe_name = delete_data['Name'].iloc[0]
         delete_message = f"{recipe_name} will be been removed from the database"
         displayTable(["Name", "Ingredients", "Instructions", "Cook Time", "Servings", "Cuisine", "Dietary Restrictions", "Rating", "ID"], delete_data, delete_message)
-        worksheet.delete_row(int(delete_data.index[0]))
-        print(delete_search)
+        worksheet.delete_rows(int(delete_data.index[0]) + 2)
+        df.drop(df[df['ID'] == delete_search].index, inplace=True)
+        df.reset_index(drop=True, inplace=True)
 
         print("Recipe deleted Sucessfully")
 
