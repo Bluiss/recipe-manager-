@@ -100,6 +100,10 @@ def addRecipe():
         rating = input("Finally, how good is it. Give it a rating out of 5!: \n").strip()
         ID = idGenerate()
 
+        if not all([name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating]):
+            print("Sorry, all input fields must be filled. Please try again.")
+            continue
+
         next_row = len(data) + 2
 
         values = [name, ingredients, instructions, time, servings, cuisine, dietaryRestrictions, rating, ID]
@@ -116,6 +120,7 @@ def addRecipe():
         if another_recipe != 'yes':
             startManager()
             break
+        
 
 
 
@@ -231,7 +236,6 @@ def deleteFoundRecipe():
     """
     delete_search = int(input("Whats the ID of the recipe you want to delete?:\n "))
     if delete_search in df['ID'].values:
-        # delete_data = df.shift(periods=1).loc[[int(delete_search)]]
         delete_data = df[df['ID'] == delete_search].copy()
         recipe_name = delete_data['Name'].iloc[0]
         delete_message = f"{recipe_name} will be been removed from the database"
