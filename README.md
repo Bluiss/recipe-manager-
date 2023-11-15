@@ -61,6 +61,9 @@ Develop a program that can have additional features added at a later date.
 ### Pre-development
 I created a flow chart, whiteboard notes and a notion document.  All I had to do then was follow my notes and code one area at a time before moving on to the next, structuring the project into the 3 key areas. 
 
+[Flow chart](https://lucid.app/lucidspark/5595ce78-f5b9-473d-aa76-72f3f2fa22e3/edit?invitationId=inv_ff13b5c2-ddd0-4f68-979f-59681a302263)
+[Notion](https://island-nyala-c9a.notion.site/227c7edde08948d291fefd0c89c752af?v=5bc07d9eac9b4675a16a1c0b01abecfa&pvs=4)
+
 ### Development
 
 Phase 1. 
@@ -120,7 +123,7 @@ Google Sheets
 
 ## Testing
 
-Full Testing Doc can be seen here - [Here}(TESTING.md)
+Full Testing Doc can be seen here - [Testing](/testing.md)
 
 ## Future Updates
 Allow the user to add their name a bespoke to application to their inputs 
