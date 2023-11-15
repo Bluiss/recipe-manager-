@@ -18,6 +18,9 @@ worksheet_favourites = sh.worksheet('Favourites')
 data = worksheet.get_all_records(default_blank=True)
 df = pd.DataFrame(worksheet.get_all_records())
 
+def refreshDataFrame():
+    global df
+    df = pd.DataFrame(worksheet.get_all_records())
 
 def displayTable(header, rows, title="Recipes"):
     table = Table(title=title)
@@ -146,6 +149,7 @@ def addRecipe():
                      "Added Recipe")
 
         print("Recipe added successfully!")
+        refreshDataFrame()
 
         another_recipe = input(
             "Do you want to add another recipe? (yes/no): \n").lower()
@@ -366,6 +370,8 @@ def deleteFoundRecipe():
         df.reset_index(drop=True, inplace=True)
 
         print("Recipe deleted Sucessfully")
+        refreshDataFrame()
+        startManager()
 
     else:
         print("Recipe not found with the provided ID.")
