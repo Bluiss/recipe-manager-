@@ -123,7 +123,7 @@ Google Sheets
 
 ## Testing
 
-Full Testing Doc can be seen here - [Testing](\testing)
+Full Testing Doc can be seen here - [Testing](\TESTING)
 
 ## Future Updates
 Allow the user to add their name a bespoke to application to their inputs 
