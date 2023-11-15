@@ -3,7 +3,7 @@
 
 I’ve created a simple application that allows user to interact with a recipe database and plan meals for a certain number of days.
 
-The deployed project live link is: 
+The deployed project live link is: https://recipe-manager-f0234092ebe1.herokuapp.com/
 
 ## Contents
 
@@ -75,8 +75,12 @@ After this function had been figured out, it was much easier to build out the re
 
 ### Add recipe
 The user can add a recipe to the Google Sheets database, the app structures the input into each specific column and then adds a randomly generated ID to the recipe in order to search for the recipes in later functions. All inputs must be filled for the recipe to be added. 
+![add recipes](readmepics/add_recipe.png)
+
 ### Delete Recipe
 The user can search for all recipes associated with the name inputted, it then asks the user to input an id associated with the recipe and removes it from the database.
+![Delete Recipe](readmepics/remove.png)
+
 ### Search for recipes
 The user can search for a recipe based on multiple search inputs
 -	Name 
@@ -84,10 +88,14 @@ The user can search for a recipe based on multiple search inputs
 -	Cook time
 -	Dietary restrictions 
 After all associated recipes have been found the user can either try again with a different search criterion or add the recipe to a separate worksheet on the database
+![Search for recipes](readmepics/search.png)
+
 ### Favourited recipes 
 Shows all recipes that have been favourited by the user
+![Favourited recipes ](readmepics/add_recipe.png)
 ### Meal Planner
 Allows the user to enter a specific number of days and create a meal plan with 3 meals for each day
+![Meal Planner](<readmepics/meal_planner .png>)
 
 ## Technologies Used
 
